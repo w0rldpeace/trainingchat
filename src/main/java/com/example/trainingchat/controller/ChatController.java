@@ -1,6 +1,8 @@
 package com.example.trainingchat.controller;
 
 import com.example.trainingchat.model.ChatMessage;
+import com.example.trainingchat.model.ChatMessageWithTime;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -13,12 +15,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Controller
 public class ChatController {
     @Autowired
-    private SimpMessageSendingOperations messagingTemplate;
+    private ModelMapper modelMapper;
 
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/public") // localhost:8080/topic/public
-    public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
-        return chatMessage;
+    public ChatMessageWithTime sendMessage(@Payload ChatMessage chatMessage) {
+        return modelMapper.map(chatMessage, ChatMessageWithTime.class);
     }
 
     @MessageMapping("/chat.addUser")
