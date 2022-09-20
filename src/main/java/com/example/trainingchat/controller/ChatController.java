@@ -15,13 +15,9 @@ public class ChatController {
     @Autowired
     private SimpMessageSendingOperations messagingTemplate;
 
-    @MessageMapping("/chat.sendMessage/{id}/")
-    @SendTo("/topic/public/{id}") // localhost:8080/topic/public
-    public ChatMessage sendMessage(@Payload ChatMessage chatMessage, @PathVariable Long id) {
-        // ChatRoom chatroom = chatRoomRepository.findById();
-
-        messagingTemplate.convertAndSend("/topic/public/{id}", chatMessage);
-
+    @MessageMapping("/chat.sendMessage")
+    @SendTo("/topic/public") // localhost:8080/topic/public
+    public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
         return chatMessage;
     }
 
