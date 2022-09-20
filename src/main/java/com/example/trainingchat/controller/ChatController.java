@@ -12,6 +12,8 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.validation.Valid;
+
 @Controller
 public class ChatController {
     @Autowired
@@ -19,7 +21,7 @@ public class ChatController {
 
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/public") // localhost:8080/topic/public
-    public ChatMessageWithTime sendMessage(@Payload ChatMessage chatMessage) {
+    public ChatMessageWithTime sendMessage(@Payload @Valid ChatMessage chatMessage) {
         return modelMapper.map(chatMessage, ChatMessageWithTime.class);
     }
 

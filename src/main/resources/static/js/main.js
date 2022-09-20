@@ -10,6 +10,7 @@ var connectingElement = document.querySelector('.connecting');
 
 var stompClient = null;
 var username = null;
+var image = null;
 
 var colors = [
     '#2196F3', '#32c787', '#00BCD4', '#ff5652',
@@ -31,6 +32,31 @@ function connect(event) {
     event.preventDefault();
 }
 
+function importData() {
+    let input = document.createElement('input');
+    input.type = 'file';
+    input.onchange = async _ => {
+        // you can use this method to get file and perform respective operations
+        let files = Array.from(input.files);
+        // gobale image variable um das Bild zwischenzuspeichern
+        image = await convertBase64(files[0]);
+        sendMessage();
+    };
+    input.click();
+}
+
+const convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
+        fileReader.onload = () => {
+            resolve(fileReader.result);
+        };
+        fileReader.onerror = (error) => {
+            reject(error);
+        };
+    });
+};
 
 function onConnected() {
     // Subscribe to the Public Topic
@@ -53,17 +79,19 @@ function onError(error) {
 
 
 function sendMessage(event) {
-    var messageContent = messageInput.value.trim();
+    //var messageContent = messageInput.value.trim();
 
-    if(messageContent && stompClient) {
+    if(stompClient) {
         var chatMessage = {
             sender: username,
             content: messageInput.value,
-            type: 'CHAT'
+            type: 'CHAT',
+            image: image
         };
 
         stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
         messageInput.value = '';
+        image = null;
     }
     event.preventDefault();
 }
@@ -94,6 +122,11 @@ function onMessageReceived(payload) {
         var usernameText = document.createTextNode(message.time + " " + message.sender);
         usernameElement.appendChild(usernameText);
         messageElement.appendChild(usernameElement);
+        if (message.image !== null) {
+            var imageObj = new Image();
+            imageObj.src = message.image;
+            messageElement.appendChild(imageObj);
+        }
     }
 
     var textElement = document.createElement('p');

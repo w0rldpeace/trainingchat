@@ -18,5 +18,6 @@ public class ChatMessageWithTime {
     private String sender;
     @JsonFormat(pattern="HH:mm:ss")
     private Date time = new Date();
-
+    private String image;
+    // Wenndu NUR ein Bild senden möchtest, dann neues Model. Sonst kann man das bestehende anpassen.
 }

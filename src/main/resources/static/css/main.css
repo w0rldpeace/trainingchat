@@ -191,6 +191,9 @@ button.accent {
     padding-left: 68px;
     position: relative;
 }
+.chat-message image {
+    display: block;
+}
 
 #chat-page .chat-message i {
     position: absolute;
@@ -220,7 +223,7 @@ button.accent {
 
 #messageForm .input-group input {
     float: left;
-    width: calc(100% - 85px);
+    width: calc(100% - 170px);
 }
 
 #messageForm .input-group button {
@@ -281,7 +284,7 @@ button.accent {
     }
 
     #messageForm .input-group input {
-        width: calc(100% - 70px);
+        width: calc(100% - 140px);
     }
 
     .chat-header {
